@@ -30,7 +30,7 @@ MediCare+ is a full-stack digital telehealth and doctor consultation platform de
 
 | Layer | Technologies |
 | :--- | :--- |
-| **Frontend** | Next.js 15, React 19, Tailwind CSS, Lucide React, Radix UI / shadcn/ui components, date-fns |
+| **Frontend** | Next.js 15, React 19, Tailwind CSS, Zustand, Lucide React, Radix UI / shadcn/ui components, date-fns |
 | **Backend** | Node.js, Express.js 5, Mongoose / MongoDB Atlas, Passport.js, JWT, bcryptjs |
 | **Security & Utilities** | Helmet, CORS, Morgan logging, Express-Validator |
 
@@ -43,16 +43,25 @@ Doctor_Consulting_Platform/
 ├── frontend/                     # Next.js frontend application
 │   ├── src/
 │   │   ├── app/                  # App Router pages and layouts
-│   │   │   ├── auth/             # Authentication pages (login/register/callback)
+│   │   │   ├── (auth)/           # Route group for authentication flows
+│   │   │   │   ├── layout.tsx    # Split-screen auth branding layout
+│   │   │   │   ├── login/
+│   │   │   │   │   ├── doctor/   # Doctor sign-in page
+│   │   │   │   │   └── patient/  # Patient sign-in page
+│   │   │   │   └── signup/
+│   │   │   │       ├── doctor/   # Doctor registration page
+│   │   │   │       └── patient/  # Patient registration page
 │   │   │   └── page.tsx          # Landing hero and home page
 │   │   ├── components/           # Reusable UI components & layouts
-│   │   │   ├── Header.tsx        # Responsive navigation bar
-│   │   │   ├── LandingHero.tsx   # Hero showcase & booking call-to-action
-│   │   │   ├── CategoryCard.tsx  # Specialization / department cards
-│   │   │   ├── Testimonials.tsx  # Patient reviews section
-│   │   │   ├── Faq.tsx           # Frequently asked questions accordion
-│   │   │   └── Footer.tsx        # Platform footer
-│   │   └── lib/                  # Utility helpers and UI configuration
+│   │   │   ├── auth/
+│   │   │   │   └── AuthForm.tsx  # Unified authentication form component
+│   │   │   ├── landing/          # Landing sections (hero, features, reviews)
+│   │   │   └── ui/               # shadcn / Radix UI primitives
+│   │   ├── service/
+│   │   │   └── httpService.ts    # Centralized HTTP client with JWT interceptor
+│   │   ├── store/
+│   │   │   └── authStore.ts      # Zustand global auth store with persistence
+│   │   └── lib/                  # Utility helpers and TypeScript interfaces
 │   ├── package.json
 │   └── tsconfig.json
 │
@@ -135,7 +144,7 @@ Doctor_Consulting_Platform/
 
 ### 1. Environment Configuration
 
-Create a `.env` file in the `backend/` directory:
+**Backend (`backend/.env`):**
 
 ```env
 PORT=8000
@@ -148,6 +157,12 @@ FRONTEND_URL=http://localhost:3000
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
 GOOGLE_CALLBACK_URL=http://localhost:8000/api/auth/google/callback
+```
+
+**Frontend (`frontend/.env.local`):**
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000/api
 ```
 
 ### 2. Backend Setup
