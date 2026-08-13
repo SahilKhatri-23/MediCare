@@ -9,9 +9,8 @@ const passport = require("passport");
 
 const router = express.Router();
 
-const signToken = (id, type) => {
-  return jwt.sign({ id, type }, process.env.JWT_SECRET, { expiresIn: "7d" });
-};
+const signToken = (id, type) =>
+  jwt.sign({ id, type }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
 router.post(
   "/doctor/register",
@@ -24,7 +23,7 @@ router.post(
   async (req, res) => {
     try {
       const exists = await Doctor.findOne({ email: req.body.email });
-      if (exists) return res.badRequest("Doctor alredy exists");
+      if (exists) return res.badRequest("Doctor already exists");
       const hashed = await bcrypt.hash(req.body.password, 12);
       const doc = await Doctor.create({ ...req.body, password: hashed });
       const token = signToken(doc._id, "doctor");
@@ -58,8 +57,6 @@ router.post(
     }
   },
 );
-
-//Patient auth
 
 router.post(
   "/patient/register",
@@ -108,7 +105,7 @@ router.post(
   },
 );
 
-//google OAuth
+//Google Outh Start form here
 
 router.get("/google", (req, res, next) => {
   const userType = req.query.type || "patient";

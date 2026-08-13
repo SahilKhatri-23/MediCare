@@ -4,27 +4,26 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { healthcareCategories } from "@/lib/constant";
 import { useRouter } from "next/navigation";
+import { userAuthStore } from "@/store/authStore";
 
 const LandingHero = () => {
-  const isAuthenticate = false;
+  const { isAuthenticated } = userAuthStore();
   const router = useRouter();
 
-
   const handleBookConsultation = () => {
-     if(!isAuthenticate) {
-      router.push('/doctor-list');
-     }else{
-      router.push('/signup/patient')
-     }
-  }
+    if (isAuthenticated) {
+      router.push("/doctor-list");
+    } else {
+      router.push("/signup/patient");
+    }
+  };
 
   const handleCategoryClick = (categoryTitle: string) => {
-    if (isAuthenticate) {
+    if (isAuthenticated) {
       router.push(`/doctor-list?category=${categoryTitle}`);
     } else {
       router.push("/signup/patient");
     }
-    
   };
   return (
     <section className="py-20 px-4 bg-gradient-to-b from-blue-50 to-white">
@@ -38,8 +37,8 @@ const LandingHero = () => {
           Quality healthcare, accessible anytime, anywhere.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-          <Button onClick={handleBookConsultation}
-           
+          <Button
+            onClick={handleBookConsultation}
             size="lg"
             className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 rounded-full px-8 py-3 text-lg"
           >

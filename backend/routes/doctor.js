@@ -229,7 +229,7 @@ router.get(
         todayAppointments,
         upcomingAppointments,
         performance: {
-          patientSatisfaction: 4.8,
+          pateintSatisfaction: 4.8,
           completionRate: 98,
           responseTime: "< 2min",
         },

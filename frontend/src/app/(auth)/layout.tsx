@@ -1,27 +1,24 @@
 "use client";
-
+import { userAuthStore } from "@/store/authStore";
 import { redirect } from "next/navigation";
 import React, { useEffect } from "react";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
-
-
-    const isAuthenticate=false;
-    const user = {
-      type: "patient",
-      name: "Sahil",
-      profileImage: "/placehilder.png",
-      email: "[EMAIL_ADDRESS]",
-    };
-    useEffect(()=>{
-      if(isAuthenticate && user){
-        const redirectPath=isAuthenticate && user?.type ==='doctor' ?'/doctor/dashboard' :'/patient/dashboard';
-        redirect(redirectPath)
+  const { isAuthenticated, user } = userAuthStore();
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      if (!user.isVerified) {
+        redirect(`/onboarding/${user.type}`);
+      } else {
+        if (user.type === "doctor") {
+          redirect("/doctor/dashboard");
+        } else {
+          redirect("/patient/dashboard");
+        }
       }
-    },[isAuthenticate, user])
-
-
-    return (
+    }
+  }, [isAuthenticated, user]);
+  return (
     <div className="min-h-screen flex">
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6 bg-white">
         {children}

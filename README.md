@@ -8,18 +8,21 @@ MediCare+ is a full-stack digital telehealth and doctor consultation platform de
 
 ### 🩺 Patient Experience & Discovery
 - **Modern Landing Interface**: High-performance UI built with Next.js (App Router), React 19, and Tailwind CSS.
+- **Patient Onboarding**: Multi-step onboarding collecting essential contact, demographic, emergency contact, and confidential medical history.
 - **Doctor Directory & Filtering**: Discover specialists by category, medical specialization, city, consultation fee range, and experience.
 - **Search Capabilities**: Fast multi-field search across doctor names, specializations, and affiliated medical clinics/hospitals.
 - **Appointment Scheduling**: Real-time slot availability checking, instant appointment booking, and booking conflict prevention.
 - **Interactive Landing Elements**: Health category exploration, patient reviews & testimonials carousel, dynamic FAQ accordion, and booking CTA banners.
 
 ### 👨‍⚕️ Doctor Dashboard & Management
+- **Doctor Onboarding**: Comprehensive 3-step profile onboarding (specialization, hospital affiliation, recurring consultation availability, slot durations).
 - **Doctor Profile & Verification**: Doctor credentials, bio, hospital affiliation, consultation pricing, and verified status management.
 - **Appointment Lifecycle**: Track upcoming, active, completed, and cancelled appointments with patient history details.
 - **Consultation Dashboard**: Summary metrics and dashboard analytics for patient flow and appointment volume.
 
 ### 🔐 Security & Architecture
 - **Multi-Role Authentication**: Dedicated authentication flows for doctors and patients with JWT token generation and role-based access control (RBAC).
+- **Session Persistence & Global State**: Zustand auth store synchronized with `localStorage` and automatic profile hydration on mount (`Providers.tsx`).
 - **Google OAuth 2.0**: Seamless social login support using Passport.js with automatic role detection and secure callback handling.
 - **Unified API Response Envelope**: Consistent response formatting middleware (`res.ok`, `res.created`, `res.badRequest`, `res.unauthorized`, `res.notFound`, `res.serverError`).
 - **Data Validation & Sanitization**: Comprehensive request payload and query validation powered by `express-validator`.
@@ -45,18 +48,24 @@ Doctor_Consulting_Platform/
 │   │   ├── app/                  # App Router pages and layouts
 │   │   │   ├── (auth)/           # Route group for authentication flows
 │   │   │   │   ├── layout.tsx    # Split-screen auth branding layout
-│   │   │   │   ├── login/
-│   │   │   │   │   ├── doctor/   # Doctor sign-in page
-│   │   │   │   │   └── patient/  # Patient sign-in page
-│   │   │   │   └── signup/
-│   │   │   │       ├── doctor/   # Doctor registration page
-│   │   │   │       └── patient/  # Patient registration page
+│   │   │   │   ├── login/        # Doctor & patient sign-in
+│   │   │   │   └── signup/       # Doctor & patient registration
+│   │   │   ├── (dashboard)/      # Protected dashboard routes
+│   │   │   │   ├── doctor/       # Doctor practice management dashboard
+│   │   │   │   └── patient/      # Patient appointment & history dashboard
+│   │   │   ├── onboarding/       # Multi-step profile completion workflows
+│   │   │   │   ├── layout.tsx    # Auth protection guard
+│   │   │   │   ├── doctor/       # Doctor profile onboarding
+│   │   │   │   └── patient/      # Patient profile onboarding
 │   │   │   └── page.tsx          # Landing hero and home page
 │   │   ├── components/           # Reusable UI components & layouts
-│   │   │   ├── auth/
-│   │   │   │   └── AuthForm.tsx  # Unified authentication form component
-│   │   │   ├── landing/          # Landing sections (hero, features, reviews)
-│   │   │   └── ui/               # shadcn / Radix UI primitives
+│   │   │   ├── auth/             # Unified AuthForm component
+│   │   │   ├── doctor/           # DoctorOnboardingForm, DoctorDashboardContent
+│   │   │   ├── patient/          # PatientOnboardingForm, PatientDashboardContent
+│   │   │   ├── landing/          # Header, Hero, Testimonials, FAQ, Footer
+│   │   │   ├── ui/               # Radix UI / shadcn primitives
+│   │   │   ├── Providers.tsx     # Client profile hydration provider
+│   │   │   └── Loader.tsx        # Suspense loading spinner
 │   │   ├── service/
 │   │   │   └── httpService.ts    # Centralized HTTP client with JWT interceptor
 │   │   ├── store/

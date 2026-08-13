@@ -21,7 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-//import { userAuthStore } from "@/store/authStore";
+import { userAuthStore } from "@/store/authStore";
 
 interface HeaderProps {
   showDashboardNav?: boolean;
@@ -34,16 +34,14 @@ interface NavigationItem {
   active: boolean;
 }
 const Header: React.FC<HeaderProps> = ({ showDashboardNav = false }) => {
-  const user ={
-    type:'patient',
-    name:'',
-    profileImage:'/placehilder.png',
-    email:'[EMAIL_ADDRESS]'
-  };
-  
-  const isAuthenticated = false; 
-  
+  const { user, isAuthenticated, logout } = userAuthStore();
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logout();
+    router.push("/");
+  };
 
   const getDashboardNavigation = (): NavigationItem[] => {
     if (!user || !showDashboardNav) return [];
@@ -186,7 +184,14 @@ const Header: React.FC<HeaderProps> = ({ showDashboardNav = false }) => {
                     Settings
                   </Link>
                 </DropdownMenuItem>
-                
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="text-red-600"
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Logout
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

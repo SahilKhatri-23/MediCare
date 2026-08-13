@@ -44,11 +44,10 @@ const pateintSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-pateintSchema.pre("save", function (next) {
+pateintSchema.pre("save", function () {
   if (this.dob && this.isModified("dob")) {
     this.age = computeAgeFromDob(this.dob);
   }
-  next();
 });
 
 module.exports = mongoose.model("Patient", pateintSchema);
